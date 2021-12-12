@@ -3,6 +3,8 @@ const express = require('express')
 //ejecutamos modulo express que me devuelve un objeto que lo guardo en app
 const app= express();
 
+require('./src/database');
+
 
 app.listen(3000);
 console.log('server on port', 3000);
