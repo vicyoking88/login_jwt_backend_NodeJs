@@ -5,6 +5,7 @@ const app= express();
 
 require('./src/database');
 
+app.use(require('./src/routes/index'))
 
 app.listen(3000);
 console.log('server on port', 3000);
