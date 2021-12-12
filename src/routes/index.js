@@ -43,8 +43,8 @@ router.post('/signin', async (req, res)=>{
     if(!User) return res.status(401).send("the email doesn't exists");
     if(User.password !== password) return res.status(401).send("Wrong Password");
 
-    const token=jwt.sign({_id: user._id}, 'secretKey');
-
+    const token=jwt.sign({_id: User._id}, 'secretKey');
+    console.log(User._id)
     return res.status(200).json({token});
 })
 
@@ -72,4 +72,56 @@ router.get('/tasks', (req, res)=>{
     ])
 })
 
+/**RUTA PRIVADA PARA PROBAR TOKEN */
+
+router.get('/private-tasks', verifyToken, (req, res)=>{
+    res.json([
+        {
+            _id:4,
+            name: 'task four',
+            description: 'test token',
+            date:'2021-12-12T16:03:21.548Z'
+        },
+        {
+            _id:5,
+            name: 'task five',
+            description: 'test token',
+            date:'2021-12-12T16:03:21.548Z'
+        },
+        {
+            _id:6,
+            name: 'task six',
+            description: 'test token',
+            date:'2021-12-12T16:03:21.548Z'
+        }
+    ])
+})
+
+/**OTRA RUTA PRIVADA */
+
+router.get ('/profile', verifyToken,(req, res)=>{
+    res.send(req.userId);
+})
+
 module.exports=router;
+
+function verifyToken(req, res, next){
+   
+    if(!req.headers.authorization){
+        return res.status(401).send('anUthorize Reqeust');
+    }
+    // sacamos el token y quitamos el Bearer
+    const token=req.headers.authorization.split(" ")[1]
+    if(token=='null'){
+        return res.status(401).send('anUthorize Reqeust');
+    }
+    console.log(token);
+
+    //validamos el token
+    
+    const payload=jwt.verify(token, 'secretKey')
+    console.log(payload);
+    req.userId=payload._id;
+    next();
+    
+}
