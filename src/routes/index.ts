@@ -1,10 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 const {Router}=require('express');
 const router=Router();
-//cargamos el modelo user
 const user = require('../models/User');
-
-//cargamos el modulo para el token
 const jwt=require('jsonwebtoken');
 
 router.get('/',(req:Request, res:Response)=>res.send('Hello World'))
@@ -57,9 +54,7 @@ router.get('/tasks', (req:Request, res:Response)=>{
         }
     ])
 })
-
 /**RUTA PRIVADA PARA PROBAR TOKEN */
-
 router.get('/private-tasks', verifyToken, (req:Request, res:Response)=>{
     res.json([
         {
@@ -82,18 +77,13 @@ router.get('/private-tasks', verifyToken, (req:Request, res:Response)=>{
         }
     ])
 })
-
 interface ReqModel extends Request{
     userId:string;
 }
-
 router.get ('/profile', verifyToken,(req:ReqModel, res:Response)=>{
     res.send(req.userId);
 })
-
 module.exports=router;
-
-
 function verifyToken(req:ReqModel, res:Response, next:NextFunction ){
     if(!req.headers.authorization){
         return res.status(401).send('anUthorize Reqeust');
