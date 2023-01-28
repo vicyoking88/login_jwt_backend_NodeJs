@@ -9,7 +9,7 @@ app.use(express.json());
 require('./src/database');
 
 //todas las rutas se les antepone /api
-app.use('/api',require('./src/routes/index'))
+app.use('/api/v1',require('./src/routes/index'))
 
 app.listen(3000);
 console.log('server on port', 3000);
